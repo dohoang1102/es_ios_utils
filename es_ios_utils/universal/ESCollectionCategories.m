@@ -25,14 +25,14 @@
     }
     va_end(args);
     
-    return [a.copy autorelease];
+    return [a.copy autoReleaseIfNotARC];
 }
 
 -(NSArray*)arrayByRemovingObject:(id)anObject
 {
-    NSMutableArray *a = [self.mutableCopy autorelease];
+    NSMutableArray *a = [self.mutableCopy autoReleaseIfNotARC];
     [a removeObject:anObject];
-    return [a.copy autorelease];
+    return [a.copy autoReleaseIfNotARC];
 }
 
 -(NSArray*)arrayOfChildrenWithKeyPath:(NSString*)keyPath
@@ -118,7 +118,7 @@
         if([set containsObject:o])
             [a addObject:o];
     
-    return [a.copy autorelease];
+    return [a.copy autoReleaseIfNotARC];
 }
 
 -(NSSet*)asSet
@@ -133,7 +133,7 @@
 
 -(NSMutableArray*)asMutableArray
 {
-    return [self.mutableCopy autorelease];
+    return [self.mutableCopy autoReleaseIfNotARC];
 }
 
 @end
@@ -200,7 +200,7 @@
     return result;
 }
 
--(NSMutableDictionary*)asMutableDictionary { return [self.mutableCopy autorelease]; }
+-(NSMutableDictionary*)asMutableDictionary { return [self.mutableCopy autoReleaseIfNotARC]; }
 
 -(BOOL)isEmpty
 {
@@ -240,7 +240,7 @@
 
 -(NSArray*)asArray
 {
-    return [self.copy autorelease];
+    return [self.copy autoReleaseIfNotARC];
 }
 
 -(id)dequeue
@@ -248,7 +248,7 @@
     if(self.isEmpty)
         return nil;
     
-    id o = [[[self objectAtIndex:0] retain] autorelease];
+    id o = [[[self objectAtIndex:0] retainIfNotARC] autoReleaseIfNotARC];
     [self removeObjectAtIndex:0];
     return o;
 }
@@ -363,7 +363,7 @@
 {
     NSSortDescriptor *d = [[NSSortDescriptor alloc] initWithKey:key ascending:ascending];
     NSArray *result = [self sortedArrayUsingDescriptors:$array(d)];
-    [d release];
+    [d releaseIfNotARC];
     return result;
 }
 
@@ -374,7 +374,7 @@
 
 -(NSMutableSet*)asMutableSet
 {
-    return [self.mutableCopy autorelease];
+    return [self.mutableCopy autoReleaseIfNotARC];
 }
 
 @end

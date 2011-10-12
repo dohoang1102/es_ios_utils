@@ -4,6 +4,7 @@
 
 #import "ESCDCategories.h"
 #import "ESFetchedTableViewController.h"
+#import "ESCDCategories.h"
 
 @implementation ESFetchedTableViewController
 
@@ -21,13 +22,13 @@
 
 -(id)initWithNibName:(NSString*)name bundle:(NSBundle*)b
 {
-    [self init];
+    self = [self init];
     return [super initWithNibName:name bundle:b];
 }
 
 -(id)initWithCoder:(NSCoder*)coder
 {
-    [self init];
+    self = [self init];
     return [super initWithCoder:coder];
 }
 
@@ -234,7 +235,8 @@ static NSString *kESFetchedTableViewControllerCell = @"ESFetchedTableViewControl
     self.cellReuseIdentifier      = nil;
     self.entityClass              = nil;
     self.doOnError                = nil;
-    [super dealloc];
+    
+    [super deallocIfNotARC];
 }
 
 @end

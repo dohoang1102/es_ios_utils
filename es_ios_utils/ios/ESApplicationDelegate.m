@@ -2,6 +2,7 @@
 #import "ESApplicationDelegate.h"
 
 #if IS_IOS && CORE_DATA_AVAILABLE
+#import "ESCDCategories.h"
 
 @implementation ESApplicationDelegate
 
@@ -25,12 +26,12 @@
 
 - (void)dealloc
 {
-    [managedObjectContext release];
-    [managedObjectModel release];
-    [persistentStoreCoordinator release];
-    [config release];
+    [managedObjectContext releaseIfNotARC];
+    [managedObjectModel releaseIfNotARC];
+    [persistentStoreCoordinator releaseIfNotARC];
+    [config releaseIfNotARC];
     
-    [super dealloc];
+    [super deallocIfNotARC];
 }
 
 /**
@@ -135,7 +136,7 @@
         //[[NSURL URLWithString:$format(@"%@.plist", environment) relativeToURL:self.applicationDirectory] path];
 
         if([[NSFileManager defaultManager] fileExistsAtPath:configPath])
-            config = [[NSDictionary dictionaryWithContentsOfFile:configPath] retain];
+            config = [[NSDictionary dictionaryWithContentsOfFile:configPath] retainIfNotARC];
         else
             NSLog(@"ERROR: no config file found at %@", configPath); 
     }
@@ -173,9 +174,9 @@
         [[NSFileManager defaultManager] removeItemAtPath:store.URL.path error:nil];
     }
     
-    [persistentStoreCoordinator release], persistentStoreCoordinator = nil;
-    [managedObjectContext release], managedObjectContext = nil;
-    [managedObjectModel release], managedObjectModel = nil;
+    [persistentStoreCoordinator releaseIfNotARC], persistentStoreCoordinator = nil;
+    [managedObjectContext releaseIfNotARC], managedObjectContext = nil;
+    [managedObjectModel releaseIfNotARC], managedObjectModel = nil;
     
     [self persistentStoreCoordinator]; //initialize if needed
 }

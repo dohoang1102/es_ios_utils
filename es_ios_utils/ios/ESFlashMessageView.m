@@ -40,7 +40,7 @@
     self.queue = nil;
     self.timer = nil;
     
-    [super dealloc];
+    [super deallocIfNotARC];
 }
 
 -(void)addMessage:(NSString*)message

@@ -7,7 +7,7 @@
 
 +(ESCircleView*)createWithDiameter:(float)diameter
 {
-    ESCircleView* cv = [[[ESCircleView alloc] init] autorelease];
+    ESCircleView* cv = ESCircleView.alloc.init.autoReleaseIfNotARC;
     cv.diameter = diameter;
     return cv;
 }

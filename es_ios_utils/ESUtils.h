@@ -29,6 +29,12 @@
   #import "ESMacNSCategories.h"
 #endif
 
+#if __has_feature(objc_arc)
+  #define HAS_ARC 1
+#else
+  #define HAS_ARC 0
+#endif
+
 #import "ESNSCategories.h"
 
 #define $array(objs...) [NSArray arrayWithObjects: objs, nil] 

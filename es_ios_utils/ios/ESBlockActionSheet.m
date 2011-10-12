@@ -11,7 +11,7 @@
 
 +(ESBlockActionSheet*)blockActionSheetWithTitle:(NSString*)title
 {
-    ESBlockActionSheet* sheet = [[[ESBlockActionSheet alloc] init] autorelease];
+    ESBlockActionSheet* sheet = ESBlockActionSheet.alloc.init.autoReleaseIfNotARC;
     sheet.title = title;
     
     return sheet;
@@ -64,7 +64,7 @@
     if(sheet)
         return;
     [buttonTitles addObject:buttonTitle];
-    [doOnPresses addObject:doOnPress?(id)[[doOnPress copy] autorelease]:NSNull.null];
+    [doOnPresses addObject:doOnPress?(id)[[doOnPress copy]autoReleaseIfNotARC]:NSNull.null];
 }
 
 #pragma mark Control
@@ -133,7 +133,7 @@
     self.doOnPresses = nil;
     self.buttonTitles = nil;
     
-    [super dealloc];
+    [super deallocIfNotARC];
 }
 
 @end

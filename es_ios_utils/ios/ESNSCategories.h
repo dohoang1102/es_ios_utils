@@ -37,7 +37,11 @@ typedef void(^ErrorBlock)(NSError*);
 @end
 
 @interface NSObject(ESUtils)
-    @property(readonly) NSString *className;
+  @property(readonly) NSString *className;
+  @property(readonly) id autoReleaseIfNotARC;
+  @property(readonly) id releaseIfNotARC;
+  @property(readonly) id retainIfNotARC;
+  -(void)deallocIfNotARC;
 @end
 
 @interface NSRegularExpression(ESUtils)

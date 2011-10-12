@@ -5,7 +5,7 @@
 
 +(ESTouchGestureRecognizer*)touchGestureRecognizerWithTarget:(id)t action:(SEL)a
 {
-    return [[[ESTouchGestureRecognizer alloc] initWithTarget:t action:a] autorelease];  
+    return [[ESTouchGestureRecognizer alloc] initWithTarget:t action:a].autoReleaseIfNotARC;  
 }
 
 -(void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)e

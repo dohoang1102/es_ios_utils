@@ -7,7 +7,7 @@
 -(id)initWithDictionary:(NSDictionary*)d
 {
     if(self = [super init])
-        dictionary = [d retain];
+        self.dictionary = d;
     return self;
 }
 
@@ -24,7 +24,7 @@
 
 -(void)dealloc
 {
-    [dictionary release], dictionary = nil;
-    [super dealloc];
+    [dictionary releaseIfNotARC], dictionary = nil;
+    [super deallocIfNotARC];
 }
 @end

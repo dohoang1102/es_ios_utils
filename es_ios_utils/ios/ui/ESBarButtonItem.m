@@ -1,6 +1,7 @@
 #if IS_IOS
 
 #import "ESBarButtonItem.h"
+#import <objc/message.h>
 
 @interface ESBarButtonItem()
 @property(nonatomic, retain) UIPopoverController* popoverController;
@@ -14,7 +15,7 @@
 +(ESBarButtonItem*)barButtonItemWithTitle:(NSString*)title action:(void(^)(void))blockAction
 
 {
-    ESBarButtonItem* result = [[[ESBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStylePlain target:nil action:nil] autorelease];
+    ESBarButtonItem* result = [[ESBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStylePlain target:nil action:nil].autoReleaseIfNotARC;
     result.blockAction = blockAction;
     return result;
 }
@@ -33,6 +34,19 @@
 @synthesize blockAction, createViewControllerForPopover, viewControllerForPopover, userTarget, userAction;
 @synthesize /*private*/ popoverController;
 
+-(void)setViewControllerForPopover:(UIViewController*)new
+{
+    if(new != viewControllerForPopover)
+    {
+        [new retainIfNotARC];
+        [viewControllerForPopover releaseIfNotARC];
+        viewControllerForPopover = new;
+        
+        [popoverController dismissPopoverAnimated:YES];
+        self.popoverController = [UIPopoverController popoverControllerWithNavigationAndContentViewController:viewControllerForPopover];
+    }
+}
+
 //It's a bit of a hack, but target and action will not return what they are set to. This is how we coopt the press event while still allowing a user to set the target and action.
 -(id)target { return self; }
 -(void)setTarget:(id)new { self.userTarget = new; }
@@ -46,7 +60,7 @@
     else
     {
         if(userTarget && userAction && [userTarget respondsToSelector:userAction])
-            [userTarget performSelector:userAction];
+            objc_msgSend(userTarget, userAction);
         
         [self presentPopover];
         
@@ -92,7 +106,10 @@
     self.userTarget                     = nil;
     self.userAction                     = nil;
     self.createViewControllerForPopover = nil;
-    [super dealloc];
+    self.userTarget = nil;
+    self.userAction = nil;
+    
+    [super deallocIfNotARC];
 }
 
 @end

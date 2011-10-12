@@ -6,7 +6,7 @@
 
 +(ESArrayBackedPickerView*)arrayBackedPickerViewWithArray:(NSArray*)array
 {
-    ESArrayBackedPickerView* result = [[[ESArrayBackedPickerView alloc] init] autorelease];
+    ESArrayBackedPickerView* result = [[[ESArrayBackedPickerView alloc] init] autoReleaseIfNotARC];
     result.array = array;
     return result;
 }
@@ -21,7 +21,7 @@
 -(id)initWithCoder:(NSCoder *)aDecoder
 {
     if(self = [super initWithCoder:aDecoder])
-        [self init];
+        self = [self init];
     return self;
 }
 
@@ -76,7 +76,7 @@
     self.key        = nil;
     self.valueKey   = nil;
     self.doOnSelect = nil;
-    [super dealloc];
+    [super deallocIfNotARC];
 }
 
 @end

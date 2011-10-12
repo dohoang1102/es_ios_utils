@@ -40,7 +40,7 @@
     
     if(view)
     {
-        ESViewDataMap *m = [[ESViewDataMap alloc] autorelease];
+        ESViewDataMap *m = ESViewDataMap.alloc.autoReleaseIfNotARC;
         [maps addObject:m];
         [mapByView setObject:m forKeyObject:view];
         
@@ -92,7 +92,7 @@
     self.maps = nil;
     self.mapByView = nil;
     
-    [super dealloc];
+    [super deallocIfNotARC];
 }
 
 @end
@@ -107,7 +107,7 @@
     self.view = nil;
     self.object = nil;
     self.keyPath = nil;
-    [super dealloc];
+    [super deallocIfNotARC];
 }
 
 -(id)objectValue

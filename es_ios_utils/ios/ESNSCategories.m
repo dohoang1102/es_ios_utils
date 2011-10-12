@@ -9,7 +9,7 @@
 
 -(NSString*)asStringWithShortFormat
 {
-    NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *formatter = NSDateFormatter.alloc.init.autoReleaseIfNotARC;
     
     formatter.timeStyle = NSDateFormatterShortStyle;
     formatter.dateStyle = NSDateFormatterShortStyle;
@@ -19,10 +19,10 @@
 
 -(NSString*)asRelativeString
 {
-    NSDateFormatter *f = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *f = NSDateFormatter.alloc.init.autoReleaseIfNotARC;
     f.timeStyle = NSDateFormatterNoStyle;
     f.dateStyle = NSDateFormatterMediumStyle;
-    f.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease];
+    f.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"].autoReleaseIfNotARC;
     f.doesRelativeDateFormatting=YES;
     
     return [f stringForObjectValue:self];
@@ -118,6 +118,37 @@
     return [NSString stringWithClassName:self.class];
 }
 
+-(id)autoReleaseIfNotARC
+{
+    #if !HAS_ARC
+        [self autorelease];
+    #endif
+    return self;
+}
+
+-(id)releaseIfNotARC
+{
+    #if !HAS_ARC
+        [self release];
+    #endif
+    return self;
+}
+
+-(id)retainIfNotARC
+{
+    #if !HAS_ARC
+        [self retain];
+    #endif
+    return self;
+}
+
+-(void)deallocIfNotARC
+{
+    #if !HAS_ARC
+        [self dealloc];
+    #endif
+}
+
 @end
 
 
@@ -135,7 +166,7 @@
 
 -(NSMutableString*)asMutableString
 {
-    return [self.mutableCopy autorelease];
+    return [self.mutableCopy autoReleaseIfNotARC];
 }
 
 //REFACTOR: consider pulling up into a math util library
@@ -170,7 +201,7 @@ float logx(float value, float base)
     CFUUIDRef theUUID = CFUUIDCreate(NULL);
     CFStringRef string = CFUUIDCreateString(NULL, theUUID);
     CFRelease(theUUID);
-    return [(NSString *)string autorelease];
+    return [(__bridge NSString *)string autoReleaseIfNotARC];
 }
 
 -(NSData*)dataWithUTF8
@@ -250,15 +281,19 @@ float logx(float value, float base)
 
 +(void)detachNewThreadBlockImplementation:(ESEmptyBlock)block
 {
-    NSAutoreleasePool *p = [[NSAutoreleasePool alloc] init];
-    block();
-    Block_release(block);
-    [p release];
+    #if !HAS_ARC
+        NSAutoreleasePool *p = [[NSAutoreleasePool alloc] init];
+        block();
+        [block release];
+        [p release];
+    #else
+        block();
+    #endif
 }
 
 +(void)detachNewThreadBlock:(ESEmptyBlock)block
 {
-    [NSThread detachNewThreadSelector:@selector(detachNewThreadBlockImplementation:) toTarget:self withObject:Block_copy(block)];
+    [NSThread detachNewThreadSelector:@selector(detachNewThreadBlockImplementation:) toTarget:self withObject:[block copy]];
 }
 
 @end

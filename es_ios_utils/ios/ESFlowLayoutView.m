@@ -7,7 +7,7 @@
 
 +(ESFlowLayoutView*)flowLayoutViewWithSubviews:(NSArray*)subviews
 {
-    ESFlowLayoutView* new = [[[ESFlowLayoutView alloc] init] autorelease];
+    ESFlowLayoutView* new = ESFlowLayoutView.alloc.init.autoReleaseIfNotARC;
     for(UIView *v in subviews)
         [new addSubview:v];
     return new;

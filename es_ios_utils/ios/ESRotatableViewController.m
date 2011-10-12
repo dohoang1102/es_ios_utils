@@ -21,7 +21,7 @@
 -(void)dealloc
 {
     [self releaseRetainedXibObjects];
-    [super dealloc];
+    [super deallocIfNotARC];
 }
 
 @end

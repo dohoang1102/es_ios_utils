@@ -25,7 +25,14 @@
 
 @implementation NSFetchRequest(ESCDCategories)
 
-+(NSFetchRequest*)fetchRequest { return [[[NSFetchRequest alloc] init] autorelease]; }
++(NSFetchRequest*)fetchRequest
+{
+    id result = [[NSFetchRequest alloc] init];
+    #if !HAS_ARC
+      [result autorelease];
+    #endif
+    return result;
+}
 
 +(NSFetchRequest*)fetchRequestWithEntity:(NSEntityDescription*)entity
 {
