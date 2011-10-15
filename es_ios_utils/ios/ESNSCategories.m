@@ -281,14 +281,10 @@ float logx(float value, float base)
 
 +(void)detachNewThreadBlockImplementation:(ESEmptyBlock)block
 {
-    #if !HAS_ARC
-        NSAutoreleasePool *p = [[NSAutoreleasePool alloc] init];
+    @autoreleasepool
+    {
         block();
-        [block release];
-        [p release];
-    #else
-        block();
-    #endif
+    }
 }
 
 +(void)detachNewThreadBlock:(ESEmptyBlock)block
